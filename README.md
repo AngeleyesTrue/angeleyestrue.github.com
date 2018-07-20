@@ -1,4 +1,4 @@
-# Github 나의 소개 페이지 만들기
+# [Github 나의 소개 페이지 만들기](https://angeleyestrue.github.io/)
 ---
 
 1. 사용자의 계정이 들어간 Repository를 만들어야 합니다.
@@ -29,55 +29,112 @@ yarn add babel-core babel-loader babel-preset-env babel-preset-react babel-prese
 ### 3. Webpack 설정
 
 ``` javascript
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
+
+const port = process.env.PORT || 3000;
+
 module.exports = {
-  mode: 'development',
-  entry: path.join(__dirname, 'src', 'index'),
+  mode: 'development',  
+  entry: './src/index.js',
   output: {
     filename: './public/bundle.[hash].js',
-    path: path.resolve(__dirname)
+    path: '/'
   },
+  devtool: 'inline-source-map',
   module: {
-    rules: [{
-      test: /.jsx?$/,
-      include: [
-        path.resolve(__dirname, 'src')
-      ],
-      exclude: [
-        path.resolve(__dirname, 'node_modules'),
-        path.resolve(__dirname, 'bower_components')
-      ],
-      loader: 'babel-loader'
-    },
-    {
-      test: /\.css$/,
-      use: [
-        {
-          loader: 'style-loader'
-        },
-        {
-          loader: 'css-loader',
-          options: {
-            module: true,
-            camelCase: true,
-            sourceMap: true
+    rules: [
+      {
+        test: /\.(js)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              camelCase: true,
+              sourceMap: true
+            }
           }
-        }
-      ]
-    }]
+        ]
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
+      //favicon: 'public/favicon.ico'
     })
   ],
-  resolve: {
-    extensions: ['.json', '.js', '.jsx', '.css']
-  },
-  devtool: 'source-map',
   devServer: {
-    publicPath: path.join('/')
+    publicPath: '/',
+    host: 'localhost',
+    port: port,
+    historyApiFallback: true,
+    open: true
   }
 };
+```
+
+### 4. Hot Module Replacement (HMR) 설정
+
+``` bash
+yarn add react-hot-loader -D
+```
+
+`.babelrc` 파일을 아래와 같이 수정
+```
+{
+  "presets": [["env", { "modules": false }], "react", "stage-1"],
+  "plugins": ["react-hot-loader/babel"]
+}
+```
+
+`webpack.config.js` 파일 수정
+```
+...
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    ...
+    publicPath: '/'
+  },
+  ...
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    ...
+  ],
+  devServer: {
+    ...
+    hot: true
+  }
+};
+```
+
+`index.js` 파일 수정
+```
+import { AppContainer } from 'react-hot-loader';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './components/App';
+
+const render = Component =>
+  ReactDOM.render(
+    <AppContainer>
+      <Component />
+    </AppContainer>,
+    document.getElementById('root')
+  );
+
+render(App);
+
+// Webpack Hot Module Replacement API 부분
+if (module.hot) module.hot.accept('./components/App', () => render(App));
 ```

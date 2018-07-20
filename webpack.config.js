@@ -1,51 +1,55 @@
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const path = require('path');
+
+const port = process.env.PORT || 3000;
+
 module.exports = {
-  mode: 'development',
-  entry: path.join(__dirname, 'src', 'index'),
+  mode: 'development',  
+  entry: './src/index.js',
   output: {
     filename: './public/bundle.[hash].js',
-    path: path.resolve(__dirname)
+    path: '/',
+    publicPath: '/',
   },
+  devtool: 'inline-source-map',
   module: {
-    rules: [{
-      test: /.jsx?$/,
-      include: [
-        path.resolve(__dirname, 'src')
-      ],
-      exclude: [
-        path.resolve(__dirname, 'node_modules'),
-        path.resolve(__dirname, 'bower_components')
-      ],
-      loader: 'babel-loader'
-    },
-    {
-      test: /\.css$/,
-      use: [
-        {
-          loader: 'style-loader'
-        },
-        {
-          loader: 'css-loader',
-          options: {
-            module: true,
-            camelCase: true,
-            sourceMap: true
+    rules: [
+      {
+        test: /\.(js)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      },
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              camelCase: true,
+              sourceMap: true
+            }
           }
-        }
-      ]
-    }]
+        ]
+      }
+    ]
   },
   plugins: [
+    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/index.html'
+      template: './src/index.html',
+      //favicon: 'public/favicon.ico'
     })
   ],
-  resolve: {
-    extensions: ['.json', '.js', '.jsx', '.css']
-  },
-  devtool: 'source-map',
   devServer: {
-    publicPath: path.join('/')
+    publicPath: '/',
+    host: 'localhost',
+    port: port,
+    historyApiFallback: true,
+    open: true,
+    hot: true
   }
 };
