@@ -90,7 +90,7 @@ yarn add react-hot-loader -D
 ```
 
 `.babelrc` 파일을 아래와 같이 수정
-```
+``` json
 {
   "presets": [["env", { "modules": false }], "react", "stage-1"],
   "plugins": ["react-hot-loader/babel"]
@@ -98,7 +98,7 @@ yarn add react-hot-loader -D
 ```
 
 `webpack.config.js` 파일 수정
-```
+``` javascript
 ...
 module.exports = {
   entry: './src/index.js',
@@ -119,7 +119,7 @@ module.exports = {
 ```
 
 `index.js` 파일 수정
-```
+``` jsx
 import { AppContainer } from 'react-hot-loader';
 import React from 'react';
 import ReactDOM from 'react-dom';
