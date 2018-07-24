@@ -86,7 +86,7 @@ module.exports = {
 yarn add react-hot-loader -D
 ```
 
-### `.babelrc` 파일을 아래와 같이 수정
+- `.babelrc` 파일을 아래와 같이 수정
 ``` json
 {
   "presets": [["env", { "modules": false }], "react", "stage-1"],
@@ -94,7 +94,7 @@ yarn add react-hot-loader -D
 }
 ```
 
-### `webpack.config.js` 파일 수정
+- `webpack.config.js` 파일 수정
 ``` javascript
 ...
 module.exports = {
@@ -138,9 +138,9 @@ if (module.hot) module.hot.accept('./components/App', () => render(App));
 
 ## 5. 코드 분할
 
->코드 분할(code splitting)을 사용하면 큰 번들 대신에 비동기 또는 병렬로 로드되는 여러 개의 번들을 만들 수 있다. 또한 Vendor 코드를 분리시켜 앱에서 로딩 시간을 줄일 수 있게 된다.
+코드 분할(code splitting)을 사용하면 큰 번들 대신에 비동기 또는 병렬로 로드되는 여러 개의 번들을 만들 수 있다. 또한 Vendor 코드를 분리시켜 앱에서 로딩 시간을 줄일 수 있게 된다.
 
->그러나 새 페이지가 실제로 아주 빨리 로딩되는 경우, 사용자는 몇 밀리 초 동안 깜빡이는 로드 스피너를 보지 못하게 되므로 300 밀리 초 정도 로딩되는 컴포넌트를 지연시키고자 한다. 이를 위해 [react-delay-render](https://github.com/theKashey/react-imported-component) 라이브러리를 사용할 것이다.
+그러나 새 페이지가 실제로 아주 빨리 로딩되는 경우, 사용자는 몇 밀리 초 동안 깜빡이는 로드 스피너를 보지 못하게 되므로 300 밀리 초 정도 로딩되는 컴포넌트를 지연시키고자 한다. 이를 위해 [react-delay-render](https://github.com/theKashey/react-imported-component) 라이브러리를 사용할 것이다.
 
 ``` bash
 yarn add react-imported-component react-delay-render
@@ -193,7 +193,7 @@ module.exports = {
 
 ### vendor 파일 분리
 
-> vendor로 애플리케이션 코드를 쪼개보자. `webpack.config.js` 파일을 열고 아래와 같이 파일을 변경한다.
+vendor로 애플리케이션 코드를 쪼개보자. `webpack.config.js` 파일을 열고 아래와 같이 파일을 변경한다.
 
 ``` javascript
 ...
@@ -227,7 +227,7 @@ module.exports = {
 
 ### 배포 설정
 
-> `webpack.config.js`파일을 `webpack.config.dev.js`로 변경하고 `webpack.config.prod.js`를 추가한다.
+`webpack.config.js`파일을 `webpack.config.dev.js`로 변경하고 `webpack.config.prod.js`를 추가한다.
 
 ``` bash
 yarn add extract-text-webpack-plugin@next -D
@@ -235,3 +235,155 @@ yarn add extract-text-webpack-plugin@next -D
 
 > css 파일은 js와 함께 번들링 되지 않도록 구성하기 위해서 `extract-text-webpack-plugin`을 추가한다.
 webpack 4를 지원하는 선 배포판을 구성하였다.
+
+- `webpack.config.prod.js` 파일 설정
+
+production 용에서만 css 파일을 번들링하므로 production config 파일에만 설정한다.
+
+``` javascript
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+module.exports = {
+  mode: 'production',  
+  entry: {
+    vendor: ['@material-ui/core'],
+    app: './src/index.js'
+  },
+  output: {
+    filename: 'public/static/[name].[hash].js',
+    path: path.resolve(__dirname),
+    publicPath: '/',
+  },
+  devtool: 'source-map',
+  module: {
+    rules: [
+    {
+      test: /\.(js)$/,
+      exclude: /node_modules/,
+      use: ['babel-loader']
+    },
+    {
+      test: /\.css$/,
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: [
+        {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+            importLoaders: 1,
+            camelCase: true,
+            sourceMap: true
+          }
+        },
+        {
+          loader: 'postcss-loader',
+          options: {
+            config: {
+              ctx: {
+                autoprefixer: {
+                  browsers: 'last 2 versions'
+                }
+              }
+            }
+          }
+        }
+        ]
+      })
+    }
+    ]
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          test: 'vendor',
+          name: 'vendor',
+          enforce: true
+        }
+      }
+    }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      //favicon: 'public/favicon.ico'
+    }),
+    new ExtractTextPlugin({
+      filename: 'public/styles/styles.[hash].css',
+      allChunks: true
+    })
+  ]
+};
+```
+
+``` bash
+yarn add postcss-loader -D
+```
+
+autofixer 사용을 위해 postcss-loader를 설치 한다.
+
+- `postcss.config.js` 파일 설정
+
+``` javascript
+module.exports = {
+  plugins: [require('autoprefixer')]
+};
+```
+
+- `package.json` 파일의 script section에 `start` 부분을 `dev`로 변경하고 `prebuild`, `build`를 추가한다.
+
+``` json
+...
+"scripts": {
+  "dev":"webpack-dev-server --config webpack.config.dev.js",
+  "prebuild": "rimraf public",
+  "build": "cross-env NODE_ENV=production webpack -p --config webpack.config.prod.js"
+},
+...
+```
+
+## 6. Webpack 구성
+
+common, dev, production으로 구분하여 분리한다.
+
+``` bash
+yarn add webpack-merge chalk -D
+
+mkdir -p build-utils/addons
+cd build-utils
+touch build-validations.js common-paths.js webpack.common.js webpack.dev.js webpack.prod.js
+```
+
+- `common-paths.js` 파일 구성
+
+Webpack 구성 경로 설정
+
+``` javascript
+const path = require('path');
+const PROJECT_ROOT = path.resolve(__dirname, '../');
+
+module.exports = {
+  projectRoot: PROJECT_ROOT,
+    outputPath: path.join(PROJECT_ROOT),
+  appEntry: path.join(PROJECT_ROOT, 'src')
+};
+```
+
+- `build-validations.js` 파일 구성
+
+``` javascript
+const chalk = require('chalk');
+const ERR_NO_ENV_FLAG = chalk.red(
+  `You must pass an --env.env flag into your build for webpack to work!`
+);
+
+module.exports = {
+  ERR_NO_ENV_FLAG
+};
+```
+

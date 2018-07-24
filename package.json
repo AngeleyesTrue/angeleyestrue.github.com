@@ -4,9 +4,9 @@
   "description": "Angeleyes Github",
   "main": "./src/index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config webpack.config.dev.js",
-    "prebuild": "rimraf public",
-    "build": "cross-env NODE_ENV=production webpack -p --config webpack.config.prod.js",
+    "dev": "webpack-dev-server --env.env=dev",
+    "prebuild": "rimraf dist",
+    "build": "cross-env NODE_ENV=production webpack -p --env.env=prod",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -38,6 +38,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
+    "chalk": "^2.4.1",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -48,6 +49,7 @@
     "style-loader": "^0.21.0",
     "webpack": "^4.16.1",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.4"
+    "webpack-dev-server": "^3.1.4",
+    "webpack-merge": "^4.1.3"
   }
 }
