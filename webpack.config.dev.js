@@ -5,9 +5,12 @@ const port = process.env.PORT || 3000;
 
 module.exports = {
   mode: 'development',  
-  entry: './src/index.js',
+  entry: {
+    vendor: ['@material-ui/core'],
+    app: './src/index.js'
+  },
   output: {
-    filename: './public/bundle.[hash].js',
+    filename: './public/[name].[hash].js',
     path: '/',
     publicPath: '/',
   },
@@ -51,5 +54,17 @@ module.exports = {
     historyApiFallback: true,
     open: true,
     hot: true
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          test: 'vendor',
+          name: 'vendor',
+          enforce: true
+        }
+      }
+    }
   }
 };
