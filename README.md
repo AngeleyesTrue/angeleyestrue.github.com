@@ -253,7 +253,7 @@ module.exports = {
     app: './src/index.js'
   },
   output: {
-    filename: 'public/static/[name].[hash].js',
+    filename: 'dist/static/[name].[hash].js',
     path: path.resolve(__dirname),
     publicPath: '/',
   },
@@ -310,11 +310,11 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: 'public/index.html',
       //favicon: 'public/favicon.ico'
     }),
     new ExtractTextPlugin({
-      filename: 'public/styles/styles.[hash].css',
+      filename: 'dist/styles/styles.[hash].css',
       allChunks: true
     })
   ]
@@ -341,7 +341,7 @@ module.exports = {
 ...
 "scripts": {
   "dev":"webpack-dev-server --config webpack.config.dev.js",
-  "prebuild": "rimraf public",
+  "prebuild": "rimraf dist",
   "build": "cross-env NODE_ENV=production webpack -p --config webpack.config.prod.js"
 },
 ...
@@ -387,3 +387,224 @@ module.exports = {
 };
 ```
 
+- `webpack.common.js` 파일 구성
+
+``` javascript
+const commonPaths = require('./common-paths');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const config = {
+  entry: {
+    vendor: ['@material-ui/core']
+  },
+  output: {
+    path: commonPaths.outputPath,
+    publicPath: '/',
+  },
+  module: {
+    rules: [
+    {
+      test: /\.(js)$/,
+      exclude: /node_modules/,
+      use: ['babel-loader']
+    }
+    ]
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          test: 'vendor',
+          name: 'vendor',
+          enforce: true
+        }
+      }
+    }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'public/index.html',
+      //favicon: 'public/favicon.ico'
+    })
+  ]
+};
+
+module.exports = config;
+```
+
+- `webpack.config.dev.js` 파일 구성
+
+``` javascript
+const commonPaths = require('./common-paths');
+const webpack = require('webpack');
+const port = process.env.PORT || 3000;
+
+const config = {
+  mode: 'development',  
+  entry: {
+    app: `${commonPaths.appEntry}/index.js`
+  },
+  output: {
+    filename: '[name].[hash].js'
+  },
+  devtool: 'inline-source-map',
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              camelCase: true,
+              sourceMap: true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    publicPath: '/',
+    host: 'localhost',
+    port: port,
+    historyApiFallback: true,
+    open: true,
+    hot: true
+  }
+};
+
+module.exports = config;
+```
+
+- `webpack.config.prod.js` 파일 구성
+
+``` javascript
+const commonPaths = require('./common-paths');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const config = {
+  mode: 'production',  
+  entry: {
+    app: [`${commonPaths.appEntry}/index.js`]
+  },
+  output: {
+    filename: 'dist/static/[name].[hash].js'
+  },
+  devtool: 'source-map',
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 1,
+                camelCase: true,
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                config: {
+                  ctx: {
+                    autoprefixer: {
+                      browsers: 'last 2 versions'
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        })
+      }
+    ]
+  },
+  plugins: [
+    new ExtractTextPlugin({
+      filename: 'dist/styles/styles.[hash].css',
+      allChunks: true
+    })
+  ]
+};
+
+module.exports = config;
+```
+
+- `package.json` 파일 수정
+
+webpack config 파일 경로 지정에서 환경변수를 이용하여 값을 전달하는 방식으로 변경
+
+``` javascript
+...
+"scripts": {
+  "dev": "webpack-dev-server --env.env=dev",
+  "prebuild": "rimraf dist",
+  "build": "cross-env NODE_ENV=production webpack -p --env.env=prod"
+},
+...
+```
+
+- `webpack.config.js` 파일 구성
+
+변경된 webpack 경로 및 addons 설정을 한다.
+
+``` javascript
+const buildValidations = require('./build-utils/build-validations');
+const commonConfig = require('./build-utils/webpack.common');
+
+const webpackMerge = require('webpack-merge');
+
+// 애드온(addon)으로 웹팩 플러그인을 추가할 수 있다. 
+// 개발할 때마다 실행할 필요가 없다.
+// '번들 분석기(Bundle Analyzer)'를 설치할 때가 대표적인 예다.
+const addons = (/* string | string[] */ addonsArg) => {
+  
+  // 애드온(addon) 목록을 노멀라이즈(Normalized) 한다.
+  let addons = [...[addonsArg]] 
+    .filter(Boolean); // If addons is undefined, filter it out
+
+  return addons.map(addonName =>
+    require(`./build-utils/addons/webpack.${addonName}.js`)
+  );
+};
+
+// 'env'는 'package.json' 내 'scripts'의 환경 변수를 포함한다.
+// console.log(env); => { env: 'dev' }
+module.exports = env => {
+
+  // 'buildValidations'를 사용해 'env' 플래그를 확인한다.
+  if (!env) {
+    throw new Error(buildValidations.ERR_NO_ENV_FLAG);
+  }
+
+  // 개발 또는 프로덕션 모드 중 사용할 웹팩 구성을 선택한다.
+  // console.log(env.env); => dev
+  const envConfig = require(`./build-utils/webpack.${env.env}.js`);
+  
+  // 'webpack-merge'는 공유된 구성 설정, 특정 환경 설정, 애드온을 합친다.
+  const mergedConfig = webpackMerge(
+    commonConfig,
+    envConfig,
+    ...addons(env.addons)
+  );
+
+  // 웹팩 최종 구성을 반환한다.
+  return mergedConfig;
+};
+```
