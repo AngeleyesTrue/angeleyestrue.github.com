@@ -3,40 +3,40 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-    entry: {
-        vendor: ['@material-ui/core']
+  entry: {
+    vendor: ['@material-ui/core'],
+  },
+  output: {
+    path: commonPaths.outputPath,
+    publicPath: '/',
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader'],
+      },
+    ],
+  },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: 'initial',
+          test: 'vendor',
+          name: 'vendor',
+          enforce: true,
+        },
+      },
     },
-    output: {
-        path: commonPaths.outputPath,
-        publicPath: '/',
-    },
-    module: {
-        rules: [
-        {
-            test: /\.(js)$/,
-            exclude: /node_modules/,
-            use: ['babel-loader']
-        }
-        ]
-    },
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                vendor: {
-                    chunks: 'initial',
-                    test: 'vendor',
-                    name: 'vendor',
-                    enforce: true
-                }
-            }
-        }
-    },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: 'public/index.html',
-            //favicon: 'public/favicon.ico'
-        })
-    ]
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: 'public/index.html',
+      //favicon: 'public/favicon.ico'
+    }),
+  ],
 };
 
 module.exports = config;
