@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[0],{204:function(e,n,t){"use strict";t.r(n);var a=t(1),l=t.n(a),c=t(203);n.default=function(){return l.a.createElement("div",null,l.a.createElement("p",null,"Angeleyes"),l.a.createElement("p",null,l.a.createElement(c.a,{to:"/"},"Navigate to Home Page!")))}}}]);
+//# sourceMappingURL=About.c10945487ef57d568b40.js.map
