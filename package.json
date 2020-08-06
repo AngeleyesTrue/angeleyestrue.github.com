@@ -25,9 +25,9 @@
   "dependencies": {
     "@material-ui/core": "^1.4.1",
     "prop-types": "^15.7.2",
-    "react": "^16.9.0",
+    "react": "^16.13.1",
     "react-delay-render": "^0.1.2",
-    "react-dom": "^16.9.0",
+    "react-dom": "^16.13.1",
     "react-imported-component": "^4.6.2",
     "react-prop-types": "^0.4.0",
     "react-router-dom": "^4.3.1",
@@ -40,17 +40,17 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
     "chalk": "^2.4.2",
-    "cross-env": "^5.2.0",
+    "cross-env": "^5.2.1",
     "css-loader": "^1.0.0",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "html-webpack-plugin": "^3.2.0",
     "postcss-loader": "^2.1.6",
-    "react-hot-loader": "^4.12.11",
+    "react-hot-loader": "^4.12.21",
     "rimraf": "^2.7.1",
     "style-loader": "^0.21.0",
-    "webpack": "^4.39.2",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0",
-    "webpack-merge": "^4.2.1"
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0",
+    "webpack-merge": "^4.2.2"
   }
 }
