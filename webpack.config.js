@@ -1,7 +1,7 @@
 const buildValidations = require('./build-utils/build-validations');
 const commonConfig = require('./build-utils/webpack.common');
 
-const webpackMerge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 
 // 애드온(addon)으로 웹팩 플러그인을 추가할 수 있다.
 // 개발할 때마다 실행할 필요가 없다.
@@ -28,7 +28,7 @@ module.exports = env => {
   const envConfig = require(`./build-utils/webpack.${env.env}.js`);
 
   // 'webpack-merge'는 공유된 구성 설정, 특정 환경 설정, 애드온을 합친다.
-  const mergedConfig = webpackMerge(
+  const mergedConfig = merge(
     commonConfig,
     envConfig,
     ...addons(env.addons),

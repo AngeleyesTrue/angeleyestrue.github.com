@@ -1,4 +1,15 @@
 {
-    "presets": [["env", { "modules": false }], "react", "stage-1"],
-    "plugins": ["react-hot-loader/babel"]
+    "presets": [
+        [
+            "@babel/env",
+            {
+                "modules": false
+            }
+        ],
+        "@babel/react"
+    ],
+    "plugins": [
+        "react-hot-loader/babel",
+        ["@babel/plugin-proposal-class-properties", { "loose": true }]
+    ]
 }
