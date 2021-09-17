@@ -23,7 +23,6 @@ const config = {
             loader: 'css-loader',
             options: {
               modules: true,
-              camelCase: true,
               sourceMap: true,
             },
           },
@@ -33,13 +32,13 @@ const config = {
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {
-    publicPath: '/',
+    //publicPath: '/',
     host: 'localhost',
     port: port,
     historyApiFallback: true,
     open: true,
     hot: true,
-    inline: true,
+    //inline: true,
   },
 };
 

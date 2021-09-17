@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkangeleyestrue_github_com=self.webpackChunkangeleyestrue_github_com||[]).push([[74],{205:(e,t,l)=>{l.r(t),l.d(t,{default:()=>a});var n=l(294),u=l(727);const a=function(){return n.createElement("div",null,n.createElement("p",null,"Angeleyes"),n.createElement("p",null,n.createElement(u.rU,{to:"/"},"Navigate to Home Page!")))}}}]);
+//# sourceMappingURL=About.7a23e1ef26a85e5ea099.js.map
