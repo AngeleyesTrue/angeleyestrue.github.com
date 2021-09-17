@@ -1,1 +1,0 @@
-{"version":3,"file":"styles.7a23e1ef26a85e5ea099.css","mappings":"AAAA;EACE,UAAU;AACZ,C;ACFA;EACE,cAAc;AAChB,C","sources":["webpack://angeleyestrue.github.com/./src/components/App.css","webpack://angeleyestrue.github.com/./src/components/Home.css"],"sourcesContent":["body {\n  color: red;\n}","body {\n  color: #333333;\n}"],"names":[],"sourceRoot":""}
