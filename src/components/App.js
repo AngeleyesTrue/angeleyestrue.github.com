@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Switch, BrowserRouter as Router, Route } from 'react-router-dom';
 import importedComponent from 'react-imported-component';
 import './App.css';
 
-import Home from './Home';
+const Home = lazy(() => import('./Home'));
 import Loading from './Loading';
 
 const AsyncAbout = importedComponent(
@@ -16,12 +16,12 @@ const AsyncAbout = importedComponent(
 const App = () => {
   return (
     <Router>
-      <div>
+      <Suspense fallback={<div>Loading...</div>}>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/About" component={AsyncAbout} />
+          <Route path="/About" component={AsyncAbout} />
         </Switch>
-      </div>
+      </Suspense>
     </Router>
   );
 };

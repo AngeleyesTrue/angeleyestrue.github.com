@@ -7,6 +7,7 @@
     "dev": "webpack-dev-server --env env=dev",
     "prebuild": "rm -rf dist",
     "build": "cross-env NODE_ENV=production webpack --env env=prod",
+    "build:report": "webpack-bundle-analyzer --port 8888 dist/bundle-stats.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -64,8 +65,11 @@
     "rimraf": "^3.0.2",
     "style-loader": "^3.2.1",
     "webpack": "^5.53.0",
+    "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.2.1",
-    "webpack-merge": "^5.8.0"
+    "webpack-manifest-plugin": "^4.0.2",
+    "webpack-merge": "^5.8.0",
+    "webpack-nano": "^1.1.1"
   }
 }
