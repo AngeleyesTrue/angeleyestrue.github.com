@@ -4225,6 +4225,6 @@ yargs-parser@^20.2.1:
   version "20.2.9"
   resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-20.2.9.tgz"
 
-yarn@^1.22.11:
-  version "1.22.11"
-  resolved "https://registry.npmjs.org/yarn/-/yarn-1.22.11.tgz"
+yarn@^1.22.13:
+  version "1.22.13"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.13.tgz#8789ef23b630fe99b819b044f4b7b93ab1bc1b8f"
