@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "WebFetch(domain:docs.anthropic.com)",
+      "WebSearch",
+      "Bash(mv:*)",
+      "Bash(claude -p \"투자 교육용 포트폴리오 분석을 도와주세요. 종목 A는 +115% 수익, 종목 B는 +20% 수익, 종목 C는 -16% 손실인 상황에서 포트폴리오 리밸런싱 이론과 수익 실현 전략을 교육 목적으로 설명해주세요.\")",
+      "Bash(claude -p \"하이닉스 115% 수익, 삼성전자 20% 수익, 삼성전자우 -16% 손실 상황에서 포트폴리오 관리 교육 목적 분석 요청\")",
+      "Bash(gemini:*)",
+      "Bash(where gemini)",
+      "Bash(git clone:*)",
+      "Bash(rd:*)",
+      "mcp__github__get_me",
+      "mcp__github__create_branch",
+      "mcp__github__get_file_contents",
+      "mcp__github__delete_file",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git checkout:*)",
+      "Bash(git push:*)",
+      "Bash(git rm:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "defaultMode": "acceptEdits",
+    "additionalDirectories": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "github",
+    "supabase"
+  ]
+}
