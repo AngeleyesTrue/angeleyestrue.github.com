@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__github__create_pull_request",
+      "Bash(git checkout:*)"
+    ],
+    "deny": [],
+    "ask": [],
+    "additionalDirectories": [
+      "D:\\tmp"
+    ]
+  }
+}

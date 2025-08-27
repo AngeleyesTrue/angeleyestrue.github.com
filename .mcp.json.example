@@ -1,0 +1,29 @@
+{
+    "mcpServers":{
+        "context7": {
+          "type": "http",
+          "url": "https://mcp.context7.com/mcp"
+        },
+        "github": {
+          "type": "http",
+          "url": "https://api.githubcopilot.com/mcp",
+          "headers": {
+            "Authorization": "Bearer YOUR_GITHUB_TOKEN_HERE"
+          }
+        },
+        "supabase": {
+          "command": "cmd",
+          "args": [
+            "/c",
+            "npx",
+            "-y",
+            "@supabase/mcp-server-supabase@latest",
+            "--read-only",
+            "--project-ref=YOUR_SUPABASE_PROJECT_URL_HERE"
+          ],
+          "env": {
+            "SUPABASE_ACCESS_TOKEN": "YOUR_SUPABASE_ACCESS_TOKEN_HERE"
+          }
+        }
+    }
+}
