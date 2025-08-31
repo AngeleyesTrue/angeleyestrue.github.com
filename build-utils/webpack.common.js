@@ -1,6 +1,7 @@
 const commonPaths = require('./common-paths');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+require('dotenv').config();
 
 const config = {
   entry: {
@@ -9,15 +10,6 @@ const config = {
   output: {
     path: commonPaths.outputPath,
     publicPath: '/',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js)$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
-      },
-    ],
   },
   optimization: {
     splitChunks: {
@@ -35,6 +27,9 @@ const config = {
     new HtmlWebpackPlugin({
       template: 'public/index.html',
       //favicon: 'public/favicon.ico'
+    }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env)
     }),
   ],
 };

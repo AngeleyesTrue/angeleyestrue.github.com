@@ -5,6 +5,7 @@ import './App.css';
 
 const Home = lazy(() => import('./Home'));
 import Loading from './Loading';
+import SupabaseTest from './SupabaseTest';
 
 const AsyncAbout = importedComponent(
   () => import(/* webpackChunkName:'About' */ './About'),
@@ -20,6 +21,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route path="/About" component={AsyncAbout} />
+          <Route path="/test" component={SupabaseTest} />
         </Switch>
       </Suspense>
     </Router>

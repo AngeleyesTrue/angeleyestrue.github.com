@@ -1,7 +1,10 @@
 const commonPaths = require('./common-paths');
 const webpack = require('webpack');
-const port = process.env.PORT || 3000;
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+require('dotenv').config();
+
+const port = process.env.PORT || 3001;
 
 const config = {
   mode: 'development',
@@ -10,10 +13,20 @@ const config = {
   },
   output: {
     filename: '[name].[chunkhash].js',
+    path: commonPaths.outputPath,
+    publicPath: '/',
+  },
+  resolve: {
+    extensions: ['.js', '.jsx'],
   },
   devtool: 'inline-source-map',
   module: {
     rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: 'babel-loader',
+      },
       {
         test: /\.css$/,
         use: [
@@ -32,13 +45,19 @@ const config = {
     ],
   },
   plugins: [
+    new HtmlWebpackPlugin({
+      template: 'public/index.html',
+    }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env)
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new BundleAnalyzerPlugin({
-      analyzerMode: 'test', /* 분석 파일 html 보고서를 dist 폴더에 저장한다 */
-      reportFilename: 'bundle-report.html', /* 분석 파일 보고서 이름은 아무거나 정하면 된다. */
-      openAnalyzer: false, /* 분석창을 실행시 열지 않는다 */
-      generateStatsFile: true, /* 분석 파일을 json 저장한다 . */
-      statsFilename: 'bundle-stats.json', /* 분석 파일 json 이름은 아무거나 정하면 된다. */
+      analyzerMode: 'test',
+      reportFilename: 'bundle-report.html',
+      openAnalyzer: false,
+      generateStatsFile: true,
+      statsFilename: 'bundle-stats.json',
     }),
   ],
   devServer: {

@@ -2,7 +2,25 @@
   "permissions": {
     "allow": [
       "mcp__github__create_pull_request",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git branch:*)",
+      "mcp__supabase__search_docs",
+      "Bash(npm init:*)",
+      "Bash(npm install:*)",
+      "Bash(npm start)",
+      "Bash(set PORT=3001)",
+      "Bash(del .babelrc)",
+      "Bash(npx webpack:*)",
+      "Bash(npx babel:*)",
+      "Bash(npx @babel/cli:*)",
+      "Bash(node:*)",
+      "Bash(npx:*)",
+      "Bash(npm run dev:*)",
+      "Bash(rm:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": [],
